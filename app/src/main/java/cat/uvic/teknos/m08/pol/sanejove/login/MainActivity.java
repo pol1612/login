@@ -2,6 +2,7 @@ package cat.uvic.teknos.m08.pol.sanejove.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText password;
     private TextView textView;
     private ArrayList<User> users;
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         password =findViewById(R.id.password);
         textView=findViewById(R.id.textView);
         String jsonData;
-        if(!checksIfFileExists("loginUsers.txt")){
+        if(!internalFileExists("loginUsers.txt")){
             users=new ArrayList<>();
             saveArrayListToJSON(users);
             System.out.println("file doesnt exist");
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             for(int i=0;i<users.size();++i){
                 System.out.println(users.get(i));
             }
+            textView.setText(users.toString());
         }
 
     }
@@ -89,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
         String jsonData=new Gson().toJson(arrayList);
         writeToFile("loginUsers.txt",jsonData);
     }
-    private boolean checksIfFileExists(String fileName) {
+    private boolean internalFileExists(String fileName) {
         File path=getApplicationContext().getFilesDir();
-        File users=new File(path,fileName);
-        return users.exists();
+        File file=new File(path,fileName);
+        return file.exists();
     }
 }
